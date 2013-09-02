@@ -16,40 +16,49 @@
 # MA 02110-1301 USA.
 
 import json
-import urlparse
-from settings import Settings
+from urlparse import urlparse
+
+import settings
+from helpers import url_for
 
 from grestful.object import Object
 from grestful.helpers import param_upload
+from grestful.decorators import (asynchronous, check_is_created,
+                                 check_is_not_created)
 
 
 class Project(Object):
-    def __init__():
-        # TODO Use endpoints returned by API
-        # GET request to host/api/v3
-        Settings.set_path('project', 'projects/')
-        Settings.set_path('profile', 'profile/')
+    def __init__(self):
+        Object.__init__(self)
+        settings.path['project'] = 'projects/'
+        settings.path['profile'] = 'profile/'
 
+    @asynchronous
+    @check_is_not_created
     def create(self, profile_id, title, description, project_file, screenshot):
-        profile_url = Settings.get_url('profile', profile_id, False)
-        user = urlparse.urlparse(profile_url).path
+        profile_url = url_for('profile', profile_id, False)
+        user = urlparse(profile_url).path
         params = [
             ('user', user),
             ('title', title),
             ('desc', description),
         ]
-        url = Settings.get_url('project')
+
+        project_url = url_for('project')
         files = [param_upload('src', project_file),
                  param_upload('screenshot', screenshot)]
-        self._post(url, params, files)
 
+        self._post(project_url, params, files)
+
+    @asynchronous
+    @check_is_created
     def list(self, profile_id):
-        url = Settings.get_url('profile', profile_id)
-        result = json.loads(self._get(url))
-        projects = result['projects']
-        return projects
+        profile_url = url_for('profile', profile_id)
+        # extract projects from profile dict
+        self._get(profile_url)
 
+    @asynchronous
+    @check_is_created
     def download(self, project_id):
-        url = Settings.get_url('project', project_id)
-        result = json.loads(self._get(url))
-        return {k: result[k] for k in ('title', 'desc', 'user')}
+        project_url = url_for('project', project_id)
+        self._get(project_url)
