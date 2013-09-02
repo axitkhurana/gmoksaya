@@ -15,9 +15,17 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-BASE_URL = "http://127.0.0.1:8000/api/v1/"
+from urllib import urlencode
+from urlparse import urljoin
 
-# TODO Use GET request to BASE_URL populate avaiable resource paths
+from settings import credentials, paths, BASE_URL
 
-paths = {}        # resource: path dictionary
-credentials = {}  # to be passed as GET params with URL
+
+def url_for(resource, resource_id='', add_credentials=True):
+    if add_credentials:
+        params = urlencode(credentials)
+    else:
+        params = ''
+
+    path = '{0}{1}?{2}'.format(paths[resource], resource_id, params)
+    return urljoin(BASE_URL, path)
