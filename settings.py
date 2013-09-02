@@ -20,9 +20,8 @@ from urlparse import urljoin
 
 
 class Settings:
-    def __init__(self):
-        self.paths = {}
-        self.base_url = "http://127.0.0.1:8000/api/v1/"
+    paths = {}
+    base_url = "http://127.0.0.1:8000/api/v1/"
 
     @classmethod
     def set_path(self, resource, path):
@@ -50,5 +49,5 @@ class Settings:
         else:
             params = ''
 
-        path = '{0}{1}{2}'.format(self.paths[resource], resource_path, params)
+        path = '{0}{1}?{2}'.format(self.paths[resource], resource_path, params)
         return urljoin(self.base_url, path)
