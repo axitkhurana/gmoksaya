@@ -22,13 +22,20 @@ from settings import credentials, paths, BASE_URL
 
 
 def url_for(resource, resource_id='', add_credentials=True):
-    if add_credentials:
-        params = '?{}'.format(urlencode(credentials))
-    else:
-        params = ''
-
+    params = _authentication_params(add_credentials)
     if resource_id:
         resource_id = '{}/'.format(resource_id)
 
     path = '{0}{1}{2}'.format(paths[resource], resource_id, params)
     return urljoin(BASE_URL, path)
+
+def url_for_media(media_path, add_credentials=True):
+    params = _authentication_params(add_credentials)
+    path = '{0}{1}'.format(media_path, params)
+    return urljoin(BASE_URL, path)
+
+def _authentication_params(add_credentials):
+    if add_credentials:
+        return '?{}'.format(urlencode(credentials))
+    else:
+        return ''

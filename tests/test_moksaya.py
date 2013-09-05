@@ -23,25 +23,34 @@ sys.path.append("..")
 from gmoksaya import projects, settings
 
 
+def __phase4_failed_cb(project, info):
+    print '[FAILED] phase4: with %s' % str(info)
+    loop.quit()
+
 def __phase3_failed_cb(project, info):
     print '[FAILED] phase3: with %s' % str(info)
     loop.quit()
 
-
 def __phase2_failed_cb(project, info):
     print '[FAILED] phase2: with %s' % str(info)
     loop.quit()
-
 
 def __phase1_failed_cb(project, info):
     print '[FAILED] phase1: with %s' % str(info)
     loop.quit()
 
 
-def __phase3_completed_cb(project, info):
-    print '[OK] phase3: with %s' % str(info)
+def __phase4_completed_cb(project, info):
+    print '[OK] phase4: with %s' % str(info)
     loop.quit()
 
+def __phase3_completed_cb(project, info):
+    print '[OK] phase3: with %s' % str(info)
+
+    project = projects.Project()
+    project.connect('completed', __phase4_completed_cb)
+    project.connect('failed', __phase4_failed_cb)
+    project.download_file(info['src'])
 
 def __phase2_completed_cb(project, info):
     print '[OK] phase2: with %s' % info['projects']
@@ -49,7 +58,7 @@ def __phase2_completed_cb(project, info):
     project = projects.Project()
     project.connect('completed', __phase3_completed_cb)
     project.connect('failed', __phase3_failed_cb)
-    project.get(1)
+    project.get(info['projects'][0]['id'])
 
 
 def __phase1_completed_cb(project, info):

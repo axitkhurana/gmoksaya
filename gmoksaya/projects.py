@@ -18,12 +18,11 @@
 from urlparse import urlparse
 
 import settings
-from helpers import url_for
+from helpers import url_for, url_for_media
 
 from grestful.object import Object
 from grestful.helpers import param_upload
-from grestful.decorators import (asynchronous, check_is_created,
-                                 check_is_not_created)
+from grestful.decorators import asynchronous
 
 
 class Project(Object):
@@ -58,3 +57,8 @@ class Project(Object):
     def get(self, project_id):
         project_url = url_for('project', project_id)
         self._get(project_url)
+
+    @asynchronous
+    def download_file(self, file_path):
+        file_url = url_for_media(file_path)
+        self._get(file_url)
