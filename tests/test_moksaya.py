@@ -27,13 +27,16 @@ def __phase4_failed_cb(project, info):
     print '[FAILED] phase4: with %s' % str(info)
     loop.quit()
 
+
 def __phase3_failed_cb(project, info):
     print '[FAILED] phase3: with %s' % str(info)
     loop.quit()
 
+
 def __phase2_failed_cb(project, info):
     print '[FAILED] phase2: with %s' % str(info)
     loop.quit()
+
 
 def __phase1_failed_cb(project, info):
     print '[FAILED] phase1: with %s' % str(info)
@@ -44,6 +47,7 @@ def __phase4_completed_cb(project, info):
     print '[OK] phase4: with %s' % str(info)
     loop.quit()
 
+
 def __phase3_completed_cb(project, info):
     print '[OK] phase3: with %s' % str(info)
 
@@ -51,6 +55,7 @@ def __phase3_completed_cb(project, info):
     project.connect('completed', __phase4_completed_cb)
     project.connect('failed', __phase4_failed_cb)
     project.download_file(info['src'])
+
 
 def __phase2_completed_cb(project, info):
     print '[OK] phase2: with %s' % info['projects']
@@ -68,6 +73,7 @@ def __phase1_completed_cb(project, info):
     project.connect('completed', __phase2_completed_cb)
     project.connect('failed', __phase2_failed_cb)
     project.list(2)
+
 
 settings.credentials['username'] = 'moksaya_username'
 settings.credentials['api_key'] = 'moksaya_api_key'
