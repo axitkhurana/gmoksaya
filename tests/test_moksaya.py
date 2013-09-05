@@ -49,7 +49,7 @@ def __phase2_completed_cb(project, info):
     project = projects.Project()
     project.connect('completed', __phase3_completed_cb)
     project.connect('failed', __phase3_failed_cb)
-    project.download(1)
+    project.get(1)
 
 
 def __phase1_completed_cb(project, info):

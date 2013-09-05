@@ -55,6 +55,6 @@ class Project(Object):
         self._get(profile_url)
 
     @asynchronous
-    def download(self, project_id):
+    def get(self, project_id):
         project_url = url_for('project', project_id)
         self._get(project_url)
