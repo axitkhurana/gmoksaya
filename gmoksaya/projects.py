@@ -29,11 +29,10 @@ from grestful.decorators import (asynchronous, check_is_created,
 class Project(Object):
     def __init__(self):
         Object.__init__(self)
-        settings.path['project'] = 'projects/'
-        settings.path['profile'] = 'profile/'
+        settings.paths['project'] = 'projects/'
+        settings.paths['profile'] = 'profile/'
 
     @asynchronous
-    @check_is_not_created
     def create(self, profile_id, title, description, project_file, screenshot):
         profile_url = url_for('profile', profile_id, False)
         user = urlparse(profile_url).path
@@ -50,14 +49,12 @@ class Project(Object):
         self._post(project_url, params, files)
 
     @asynchronous
-    @check_is_created
     def list(self, profile_id):
         profile_url = url_for('profile', profile_id)
         # extract projects from profile dict
         self._get(profile_url)
 
     @asynchronous
-    @check_is_created
     def download(self, project_id):
         project_url = url_for('project', project_id)
         self._get(project_url)

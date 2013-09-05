@@ -23,9 +23,12 @@ from settings import credentials, paths, BASE_URL
 
 def url_for(resource, resource_id='', add_credentials=True):
     if add_credentials:
-        params = urlencode(credentials)
+        params = '?{}'.format(urlencode(credentials))
     else:
         params = ''
 
-    path = '{0}{1}?{2}'.format(paths[resource], resource_id, params)
+    if resource_id:
+        resource_id = '{}/'.format(resource_id)
+
+    path = '{0}{1}{2}'.format(paths[resource], resource_id, params)
     return urljoin(BASE_URL, path)
